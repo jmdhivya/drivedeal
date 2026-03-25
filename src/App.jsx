@@ -34,11 +34,13 @@ function AppContent() {
 }
 
 function App() {
+  const basename = (import.meta.env.BASE_URL || '/DRIVEDEAL').replace(/\/$/, '');
+
   return (
     <LanguageProvider>
       <AuthProvider>
         <ThemeProvider>
-          <Router>
+          <Router basename={basename}>
             <AppContent />
           </Router>
         </ThemeProvider>
