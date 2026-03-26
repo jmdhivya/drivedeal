@@ -1247,6 +1247,40 @@ app.delete('/api/compare/:userId/:carId', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend server running on http://localhost:${PORT}`);
+const startServer = (port, attemptsLeft = 10) => {
+  const server = app.listen(port, () => {
+    console.log(`🚀 Backend server running on http://localhost:${port}`);
+  });
+
+  server.on('error', (err) => {
+    if (err && err.code === 'EADDRINUSE' && attemptsLeft > 0) {
+      console.warn(`⚠️  Port ${port} is already in use. Trying ${port + 1}...`);
+      server.close(() => startServer(port + 1, attemptsLeft - 1));
+      return;
+    }
+    console.error('❌ Server failed to start:', err);
+    process.exit(1);
+  });
+};
+
+
+// ✅ Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    success: true, 
+    message: 'Backend API is running with MongoDB' 
+  });
 });
+
+// ✅ ROOT ROUTE (VERY IMPORTANT)
+app.get('/', (req, res) => {
+  res.send("DriveDeal Backend is running 🚀");
+});
+
+// ✅ 404 HANDLER (ONLY ONE!)
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found ❌" });
+});
+
+// 🚀 START SERVER
+startServer(PORT);
