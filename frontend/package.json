@@ -1,0 +1,24 @@
+{
+  "name": "second-hand-car-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "vite": "^7.3.0"
+  },
+  "dependencies": {
+    "@lottiefiles/dotlottie-wc": "^0.8.14",
+    "framer-motion": "^12.23.26",
+    "jspdf": "^4.0.0",
+    "jspdf-autotable": "^5.0.7",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.11.0"
+  }
+}

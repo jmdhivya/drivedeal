@@ -85,9 +85,23 @@ const upload = multer({
 });
 
 // MongoDB Connection
-mongoose.connect('mongodb://127.0.0.1:27017/drivedeal')
-.then(() => console.log('✅ MongoDB Connected to drivedeal database'))
-.catch(err => console.error('❌ MongoDB Connection Error:', err));
+
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/drivedeal';
+
+if (!mongoUri.startsWith('mongodb://') && !mongoUri.startsWith('mongodb+srv://')) {
+  console.error(
+    '❌ MongoDB Connection Error: Invalid MONGO_URI scheme. Expected URI to start with "mongodb://" or "mongodb+srv://".'
+  );
+  console.error('Received MONGO_URI:', mongoUri);
+  process.exit(1);
+}
+
+mongoose
+  .connect(mongoUri, {
+    serverSelectionTimeoutMS: 10_000
+  })
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 // Mongoose Schemas and Models
 
